@@ -70,6 +70,38 @@
 /obj/item/weapon/reagent_containers/proc/self_feed_message(var/mob/user)
 	to_chat(user, "<span class='notice'>You eat \the [src]</span>")
 
+/obj/item/reagent_containers/glass/throw_impact(atom/hit_atom)
+	if (QDELETED(src))
+		return
+	if (prob(80))
+		if (reagents.reagent_list.len > 0)
+			visible_message(
+				SPAN_DANGER("\The [src] shatters from the impact and spills all its contents!"),
+				SPAN_DANGER("You hear the sound of glass shattering!")
+			)
+			reagents.splash(hit_atom, reagents.total_volume)
+		else
+			visible_message(
+				SPAN_DANGER("\The [src] shatters from the impact!"),
+				SPAN_DANGER("You hear the sound of glass shattering!")
+			)
+		playsound(src.loc, SFX_SHATTER, 100)
+		new /obj/item/material/shard(src.loc)
+		qdel(src)
+	else
+		if (reagents.reagent_list.len > 0)
+			visible_message(
+				SPAN_DANGER("\The [src] bounces and spills all its contents!"),
+				SPAN_WARNING("You hear the sound of glass hitting something.")
+			)
+			reagents.splash(hit_atom, reagents.total_volume)
+		else
+			visible_message(
+				SPAN_WARNING("\The [src] bounces dangerously. Luckily it didn't break."),
+				SPAN_WARNING("You hear the sound of glass hitting something.")
+			)
+		playsound(src.loc, "sounds/effects/Glasshit.ogg", 50)
+
 /obj/item/weapon/reagent_containers/proc/other_feed_message_start(var/mob/user, var/mob/target)
 	user.visible_message("<span class='warning'>[user] is trying to feed [target] \the [src]!</span>")
 
