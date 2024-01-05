@@ -85,8 +85,8 @@
 				SPAN_DANGER("\The [src] shatters from the impact!"),
 				SPAN_DANGER("You hear the sound of glass shattering!")
 			)
-		playsound(src.loc, SFX_SHATTER, 100)
-		new /obj/item/material/shard(src.loc)
+		playsound(src, "shatter" 100)
+		new /obj/item/weapon/material/shard(src.loc)
 		qdel(src)
 	else
 		if (reagents.reagent_list.len > 0)
