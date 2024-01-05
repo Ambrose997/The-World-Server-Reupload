@@ -98,6 +98,38 @@
 /obj/item/weapon/reagent_containers/glass/self_feed_message(var/mob/user)
 	to_chat(user, "<span class='notice'>You swallow a gulp from \the [src].</span>")
 
+/obj/item/weapon/reagent_containers/glass/throw_impact(atom/hit_atom)
+	if (QDELETED(src))
+		return
+	if (prob(80))
+		if (reagents.reagent_list.len > 0)
+			visible_message(
+				SPAN_DANGER("\The [src] shatters from the impact and spills all its contents!"),
+				SPAN_DANGER("You hear the sound of glass shattering!")
+			)
+			reagents.splash(hit_atom, reagents.total_volume)
+		else
+			visible_message(
+				SPAN_DANGER("\The [src] shatters from the impact!"),
+				SPAN_DANGER("You hear the sound of glass shattering!")
+			)
+		playsound(src.loc, "shatter", 100)
+		new /obj/item/weapon/material/shard(src.loc)
+		qdel(src)
+	else
+		if (reagents.reagent_list.len > 0)
+			visible_message(
+				SPAN_DANGER("\The [src] bounces and spills all its contents!"),
+				SPAN_WARNING("You hear the sound of glass hitting something.")
+			)
+			reagents.splash(hit_atom, reagents.total_volume)
+		else
+			visible_message(
+				SPAN_WARNING("\The [src] bounces dangerously. Luckily it didn't break."),
+				SPAN_WARNING("You hear the sound of glass hitting something.")
+			)
+		playsound(src.loc, "sounds/effects/Glasshit.ogg", 50)
+
 /obj/item/weapon/reagent_containers/glass/afterattack(var/obj/target, var/mob/user, var/proximity)
 	if(!is_open_container() || !proximity) //Is the container open & are they next to whatever they're clicking?
 		return 1 //If not, do nothing.
