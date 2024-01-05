@@ -85,7 +85,7 @@
 				SPAN_DANGER("\The [src] shatters from the impact!"),
 				SPAN_DANGER("You hear the sound of glass shattering!")
 			)
-		playsound(src, "shatter" 100)
+		playsound(src, "shatter", 100)
 		new /obj/item/weapon/material/shard(src.loc)
 		qdel(src)
 	else
